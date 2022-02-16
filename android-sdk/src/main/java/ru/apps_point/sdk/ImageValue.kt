@@ -8,7 +8,6 @@ import androidx.compose.ui.res.painterResource
 import coil.compose.rememberImagePainter
 import kotlinx.datetime.LocalDateTime
 
-val v = LocalDateTime(1, 1, 1, 1, 1)
 sealed class ImageValue {
 
     class Url(val value: String) : ImageValue()
