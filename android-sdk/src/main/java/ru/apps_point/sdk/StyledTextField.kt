@@ -18,12 +18,13 @@ import androidx.compose.ui.unit.dp
 
 class StyledTextFieldStyles internal constructor(
     val textStyle: TextStyle,
-    val unfocusedLabelStyle: TextStyle,
+    val initialLabelStyle: TextStyle,
     val focusedLabelStyle: TextStyle,
     val placeholderStyle: TextStyle,
     val errorStyle: TextStyle,
 ) {
-    fun labelStyle(focused: Boolean) = if (focused) focusedLabelStyle else unfocusedLabelStyle
+    fun labelStyle(focused: Boolean, valueIsEmpty: Boolean) =
+        if (!focused && valueIsEmpty) initialLabelStyle else focusedLabelStyle
 }
 
 object StyledTextFieldDefaults {
@@ -31,13 +32,13 @@ object StyledTextFieldDefaults {
     @Composable
     fun styles(
         textStyle: TextStyle = LocalTextStyle.current,
-        unfocusedLabelStyle: TextStyle = LocalTextStyle.current,
+        initialLabelStyle: TextStyle = LocalTextStyle.current,
         focusedLabelStyle: TextStyle = LocalTextStyle.current,
         placeholderStyle: TextStyle = LocalTextStyle.current,
         errorStyle: TextStyle = LocalTextStyle.current,
     ) = StyledTextFieldStyles(
         textStyle,
-        unfocusedLabelStyle,
+        initialLabelStyle,
         focusedLabelStyle,
         placeholderStyle,
         errorStyle
@@ -57,6 +58,7 @@ fun StyledTextField(
     error: String? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
+    clearIcon: @Composable (() -> Unit)? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions(),
@@ -68,22 +70,22 @@ fun StyledTextField(
     colors: TextFieldColors = TextFieldDefaults.textFieldColors()
 ) {
     var focused by remember { mutableStateOf(false) }
-    Column {
+    Column(modifier = modifier) {
         TextField(
             value,
             onValueChange,
-            modifier.onFocusChanged { focused = it.isFocused },
+            Modifier.onFocusChanged { focused = it.isFocused },
             enabled,
             readOnly,
             styles.textStyle,
             label?.let {
-                @Composable { Text(text = it, style = styles.labelStyle(focused)) }
+                @Composable { Text(text = it, style = styles.labelStyle(focused, value.isEmpty())) }
             },
             placeholder?.let {
                 @Composable { Text(text = it, style = styles.placeholderStyle) }
             },
             leadingIcon,
-            trailingIcon,
+            clearIcon?.let { if (value.isNotEmpty()) it else null } ?: trailingIcon,
             error != null,
             visualTransformation,
             keyboardOptions,
