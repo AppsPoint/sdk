@@ -6,7 +6,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import coil.compose.rememberImagePainter
-import kotlinx.datetime.LocalDateTime
 
 sealed class ImageValue {
 

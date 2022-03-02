@@ -18,3 +18,5 @@ fun rememberSvgPainter(url: String): Painter {
     }
     return rememberImagePainter(data = url, imageLoader = imageLoader!!)
 }
+
+fun <T> Any?.cast() = this as T

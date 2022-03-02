@@ -1,6 +1,7 @@
 package ru.apps_point.sdk
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.ZeroCornerSize
@@ -71,31 +72,38 @@ fun StyledTextField(
 ) {
     var focused by remember { mutableStateOf(false) }
     Column(modifier = modifier) {
-        TextField(
-            value,
-            onValueChange,
-            Modifier.onFocusChanged { focused = it.isFocused },
-            enabled,
-            readOnly,
-            styles.textStyle,
-            label?.let {
-                @Composable { Text(text = it, style = styles.labelStyle(focused, value.isEmpty())) }
-            },
-            placeholder?.let {
-                @Composable { Text(text = it, style = styles.placeholderStyle) }
-            },
-            leadingIcon,
-            clearIcon?.let { if (value.isNotEmpty()) it else null } ?: trailingIcon,
-            error != null,
-            visualTransformation,
-            keyboardOptions,
-            keyboardActions,
-            singleLine,
-            maxLines,
-            interactionSource,
-            shape,
-            colors
-        )
+        Box {
+            TextField(
+                value,
+                onValueChange,
+                modifier.onFocusChanged { focused = it.isFocused },
+                enabled,
+                readOnly,
+                styles.textStyle,
+                label?.let {
+                    @Composable {
+                        Text(
+                            text = it,
+                            style = styles.labelStyle(focused, value.isEmpty())
+                        )
+                    }
+                },
+                placeholder?.let {
+                    @Composable { Text(text = it, style = styles.placeholderStyle) }
+                },
+                leadingIcon,
+                clearIcon?.let { if (value.isNotEmpty()) it else null } ?: trailingIcon,
+                error != null,
+                visualTransformation,
+                keyboardOptions,
+                keyboardActions,
+                singleLine,
+                maxLines,
+                interactionSource,
+                shape,
+                colors
+            )
+        }
         error?.let {
             Text(
                 modifier = Modifier.padding(start = 16.dp, top = 4.dp),

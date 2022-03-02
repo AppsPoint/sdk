@@ -7,5 +7,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "AppsPoint-sdk"
-include ':app'
+//include ':app'
 include ':android-sdk'
