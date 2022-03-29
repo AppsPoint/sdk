@@ -41,8 +41,8 @@ abstract class Integrations {
 object UiIntegrations : Integrations() {
     override val integrationType = typeOf<UiIntegration>()
 
-    inline fun <reified T : UiIntegration> put(noinline factory: (args: Array<*>) -> T) {
-        putInternal(factory)
+    inline fun <reified T : UiIntegration> put(noinline factory: UiIntegrationContext.() -> T) {
+        putInternal { factory(it[0].cast()) }
     }
 
     inline fun <reified T : UiIntegration> get(args: Any?, parentIntegration: UiIntegration?): T? =
