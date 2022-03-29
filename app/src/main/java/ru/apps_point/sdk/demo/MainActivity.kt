@@ -32,30 +32,30 @@ class MainActivity : ComponentActivity() {
                         var value by remember { mutableStateOf("") }
                         EnhancedTextField(
                             modifier = Modifier
-                                .height(48.dp)
+                                //.height(48.dp)
                                 .fillMaxWidth(),
                             value = value,
                             onValueChange = { value = it },
-                            placeholder = "Placeholder",
-                            shape = RoundedCornerShape(8.dp),
-                            colors = TextFieldDefaults.textFieldColors(
-                                disabledIndicatorColor = Color.Transparent,
-                                errorIndicatorColor = Color.Transparent,
-                                focusedIndicatorColor = Color.Transparent,
-                                unfocusedIndicatorColor = Color.Transparent
-                            ),
-                            leadingIcon = {
-                                Box(
-                                    modifier = Modifier
-                                        .size(20.dp)
-                                        .background(Color.Green)
-                                )
-                            },
-                            paddings = EnhancedTextFieldDefaults.paddings(
-                                textHorizontalPadding = 0.dp,
-                                textTopPadding = 14.dp,
-                                textBottomPadding = 14.dp,
-                            )
+                            label = "Placeholder",
+//                            shape = RoundedCornerShape(8.dp),
+//                            colors = TextFieldDefaults.textFieldColors(
+//                                disabledIndicatorColor = Color.Transparent,
+//                                errorIndicatorColor = Color.Transparent,
+//                                focusedIndicatorColor = Color.Transparent,
+//                                unfocusedIndicatorColor = Color.Transparent
+//                            ),
+//                            leadingIcon = {
+//                                Box(
+//                                    modifier = Modifier
+//                                        .size(20.dp)
+//                                        .background(Color.Green)
+//                                )
+//                            },
+//                            paddings = EnhancedTextFieldDefaults.paddings(
+//                                textHorizontalPadding = 0.dp,
+//                                textTopPadding = 14.dp,
+//                                textBottomPadding = 14.dp,
+//                            )
                         )
                     }
                 }
