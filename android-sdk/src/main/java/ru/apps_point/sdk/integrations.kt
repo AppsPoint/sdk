@@ -8,7 +8,7 @@ import kotlin.reflect.typeOf
 interface Integration
 interface UiIntegration : Integration
 class UiIntegrationContext @PublishedApi internal constructor(
-    val args: Any?,
+    val initialState: Any?,
     val parentIntegration: UiIntegration?
 )
 
@@ -45,15 +45,15 @@ object UiIntegrations : Integrations() {
         putInternal { factory(it[0].cast()) }
     }
 
-    inline fun <reified T : UiIntegration> get(args: Any?, parentIntegration: UiIntegration?): T? =
-        getInternal(UiIntegrationContext(args, parentIntegration))
+    inline fun <reified T : UiIntegration> get(initialState: Any?, parentIntegration: UiIntegration?): T? =
+        getInternal(UiIntegrationContext(initialState, parentIntegration))
 
     inline fun <reified T : UiIntegration> get(
-        args: Any?,
+        initialState: Any?,
         parentIntegration: UiIntegration?,
         defaultFactory: UiIntegrationContext.() -> T
-    ): T = get(args, parentIntegration)
-        ?: defaultFactory(UiIntegrationContext(args, parentIntegration))
+    ): T = get(initialState, parentIntegration)
+        ?: defaultFactory(UiIntegrationContext(initialState, parentIntegration))
 }
 
 object ModelIntegrations : Integrations() {
