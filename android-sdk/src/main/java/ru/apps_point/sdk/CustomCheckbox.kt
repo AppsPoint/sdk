@@ -19,8 +19,8 @@ fun CustomCheckbox(
     uncheckedState: @Composable () -> Unit,
     checkedState: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    uncheckedDisabledState: @Composable () -> Unit = uncheckedState,
-    checkedDisabledState: @Composable () -> Unit = checkedState,
+    disabledUncheckedState: @Composable () -> Unit = uncheckedState,
+    disabledCheckedState: @Composable () -> Unit = checkedState,
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
@@ -52,8 +52,8 @@ fun CustomCheckbox(
         when {
             !checked && enabled -> uncheckedState()
             checked && enabled -> checkedState()
-            !checked -> uncheckedDisabledState()
-            checked -> checkedDisabledState()
+            !checked -> disabledUncheckedState()
+            checked -> disabledCheckedState()
         }
     }
 }
