@@ -1,18 +1,24 @@
 package ru.apps_point.sdk
 
+import kotlinx.coroutines.CoroutineScope
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.full.isSubtypeOf
 import kotlin.reflect.typeOf
 
 interface Integration
+
 interface UiIntegration : Integration
+
 class UiIntegrationContext @PublishedApi internal constructor(
     val initialState: Any?,
-    val parentIntegration: UiIntegration?
+    val parentIntegration: UiIntegration?,
+    val scope: CoroutineScope
 )
 
 interface ModelIntegration : Integration
+
+interface DataSource : Integration
 
 abstract class Integrations {
 
@@ -45,15 +51,19 @@ object UiIntegrations : Integrations() {
         putInternal { factory(it[0].cast()) }
     }
 
-    inline fun <reified T : UiIntegration> get(initialState: Any?, parentIntegration: UiIntegration?): T? =
-        getInternal(UiIntegrationContext(initialState, parentIntegration))
+    inline fun <reified T : UiIntegration> get(
+        initialState: Any?,
+        parentIntegration: UiIntegration?,
+        scope: CoroutineScope,
+    ): T? = getInternal(UiIntegrationContext(initialState, parentIntegration, scope))
 
     inline fun <reified T : UiIntegration> get(
         initialState: Any?,
         parentIntegration: UiIntegration?,
+        scope: CoroutineScope,
         defaultFactory: UiIntegrationContext.() -> T
-    ): T = get(initialState, parentIntegration)
-        ?: defaultFactory(UiIntegrationContext(initialState, parentIntegration))
+    ): T = get(initialState, parentIntegration, scope)
+        ?: defaultFactory(UiIntegrationContext(initialState, parentIntegration, scope))
 }
 
 object ModelIntegrations : Integrations() {
@@ -64,4 +74,14 @@ object ModelIntegrations : Integrations() {
     }
 
     inline fun <reified T : ModelIntegration> get(vararg args: Any?): T? = getInternal(*args)
+}
+
+object DataSources : Integrations() {
+    override val integrationType = typeOf<DataSource>()
+
+    inline fun <reified T : DataSource> put(noinline factory: (args: Array<*>) -> T) {
+        putInternal(factory)
+    }
+
+    inline fun <reified T : DataSource> get(vararg args: Any?): T? = getInternal(*args)
 }
