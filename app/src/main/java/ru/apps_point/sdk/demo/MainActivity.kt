@@ -15,45 +15,53 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import ru.apps_point.sdk.CustomCheckbox
-import ru.apps_point.sdk.EnhancedTextField
-import ru.apps_point.sdk.EnhancedTextFieldDefaults
+import androidx.compose.ui.window.Popup
+import ru.apps_point.sdk.*
 import ru.apps_point.sdk.demo.ui.theme.AppsPointsdkTheme
-import ru.apps_point.sdk.rememberSvgPainter
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AppsPointsdkTheme {
-                Surface(color = MaterialTheme.colors.background) {
-                    Box(modifier = Modifier.padding(16.dp)) {
-                        var c by remember {
-                            mutableStateOf(false)
-                        }
-                        CustomCheckbox(
-                            checked = c,
-                            onCheckedChange = { c = !c },
-                            uncheckedState = {
-                                Image(
-                                    painter = rememberSvgPainter(url = "file:///android_asset/unchecked.svg"),
-                                    contentDescription = null
-                                )
-                            },
-                            checkedState = {
-                                Image(
-                                    painter = rememberSvgPainter(url = "file:///android_asset/checked.svg"),
-                                    contentDescription = null
-                                )
-                            }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White)
+                    .padding(32.dp)
+            ) {
+                BottomSheetScaffold(sheetContent = {}, sheetElevation = 0.dp) {
+
+                }
+                Row(
+                    modifier = Modifier
+                        .width(200.dp)
+                        .height(100.dp)
+                        .outerShadow(
+                            color = Color.Gray.copy(alpha = 0.9f),
+                            offsetX = 5.dp,
+                            offsetY = 5.dp,
+                            blurRadius = 15.dp,
+                            shape = RoundedCornerShape(32.dp, 32.dp, 0.dp, 0.dp)
                         )
-                    }
+
+                        .clip(
+                            shape = RoundedCornerShape(32.dp, 32.dp, 0.dp, 0.dp)
+                        )
+                        .background(
+                            Color.White,
+                        )
+                ) {
+                    Text(text = "Hi")
                 }
             }
+
         }
     }
 }
