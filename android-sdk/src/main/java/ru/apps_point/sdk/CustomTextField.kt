@@ -61,7 +61,7 @@ fun CustomTextField(
             {
                 Box {
                     innerTextField()
-                    if (value.isEmpty() && placeholder != null)
+                    if (value.isEmpty() && !placeholder.isNullOrBlank())
                         Text(
                             text = placeholder, style = styles.placeholderStyle.merge(
                                 TextStyle(color = colors.placeholderColor(enabled = true).value)
@@ -167,7 +167,7 @@ object CustomTextFieldDefaults {
         textColor: Color = LocalContentColor.current.copy(LocalContentAlpha.current),
         disabledTextColor: Color = textColor.copy(ContentAlpha.disabled),
         errorColor: Color = MaterialTheme.colors.error,
-        cursorColor: Color = MaterialTheme.colors.primary,
+        cursorColor: Color = textColor,
         errorCursorColor: Color = MaterialTheme.colors.error,
         focusedIndicatorColor: Color =
             MaterialTheme.colors.primary.copy(alpha = ContentAlpha.high),
