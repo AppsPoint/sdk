@@ -1,19 +1,22 @@
 package ru.apps_point.sdk
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
+import kotlin.reflect.full.createType
 import kotlin.reflect.full.isSubtypeOf
-import kotlin.reflect.typeOf
+
+abstract class ViewModel {
+    val scope = CoroutineScope(Dispatchers.IO)
+}
 
 interface Integration
 
-interface UiIntegration : Integration
+interface ViewIntegration : Integration
 
-class UiIntegrationContext @PublishedApi internal constructor(
-    val initialState: Any?,
-    val parentIntegration: UiIntegration?,
-    val scope: CoroutineScope
+class ViewIntegrationContext @PublishedApi internal constructor(
+    val viewModel: ViewModel
 )
 
 interface ModelIntegration : Integration
@@ -44,30 +47,23 @@ abstract class Integrations {
             (supertypes.first { it.isSubtypeOf(integrationType) }.classifier as KClass<*>).qualifiedName!!
 }
 
-object UiIntegrations : Integrations() {
-    override val integrationType = typeOf<UiIntegration>()
+object ViewIntegrations : Integrations() {
+    override val integrationType = ViewIntegration::class.createType()
 
-    inline fun <reified T : UiIntegration> put(noinline factory: UiIntegrationContext.() -> T) {
+    inline fun <reified T : ViewIntegration> put(noinline factory: ViewIntegrationContext.() -> T) {
         putInternal { factory(it[0].cast()) }
     }
 
-    inline fun <reified T : UiIntegration> get(
-        initialState: Any?,
-        parentIntegration: UiIntegration?,
-        scope: CoroutineScope,
-    ): T? = getInternal(UiIntegrationContext(initialState, parentIntegration, scope))
+    inline fun <reified T : ViewIntegration> get(viewModel: ViewModel): T? = getInternal(viewModel)
 
-    inline fun <reified T : UiIntegration> get(
-        initialState: Any?,
-        parentIntegration: UiIntegration?,
-        scope: CoroutineScope,
-        defaultFactory: UiIntegrationContext.() -> T
-    ): T = get(initialState, parentIntegration, scope)
-        ?: defaultFactory(UiIntegrationContext(initialState, parentIntegration, scope))
+    inline fun <reified T : ViewIntegration> get(
+        viewModel: ViewModel,
+        defaultFactory: ViewIntegrationContext.() -> T
+    ): T = get(viewModel) ?: defaultFactory(ViewIntegrationContext(viewModel))
 }
 
 object ModelIntegrations : Integrations() {
-    override val integrationType = typeOf<ModelIntegration>()
+    override val integrationType = ModelIntegration::class.createType()
 
     inline fun <reified T : ModelIntegration> put(noinline factory: (args: Array<*>) -> T) {
         putInternal(factory)
@@ -77,7 +73,7 @@ object ModelIntegrations : Integrations() {
 }
 
 object DataSources : Integrations() {
-    override val integrationType = typeOf<DataSource>()
+    override val integrationType = DataSource::class.createType()
 
     inline fun <reified T : DataSource> put(noinline factory: (args: Array<*>) -> T) {
         putInternal(factory)
