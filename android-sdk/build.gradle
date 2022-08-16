@@ -11,10 +11,10 @@ android {
         minSdk 21
         targetSdk 31
         versionCode 1
-        versionName "1.0"
+        versionName '1.0'
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles "consumer-rules.pro"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        consumerProguardFiles 'consumer-rules.pro'
     }
 
     buildTypes {
@@ -46,13 +46,13 @@ dependencies {
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    api "io.coil-kt:coil-compose:1.4.0"
-    api "io.coil-kt:coil-svg:1.3.2"
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
+    api 'io.coil-kt:coil-compose:1.4.0'
+    api 'io.coil-kt:coil-svg:1.3.2'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.6.10'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.6.10"
+    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.6.10'
 }
 
 afterEvaluate {
@@ -85,5 +85,5 @@ afterEvaluate {
 
 task sourceJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
-    classifier "sources"
+    classifier 'sources'
 }

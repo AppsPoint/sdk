@@ -3,8 +3,13 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+//        mavenLocal()
+        maven {
+            url 'libs/repository'
+        }
     }
 }
-rootProject.name = "AppsPoint-sdk"
-//include ':app'
+
+rootProject.name = 'AppsPoint-sdk'
+include ':app'
 include ':android-sdk'
