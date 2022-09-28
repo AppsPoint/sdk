@@ -17,23 +17,23 @@ struct APText: View {
 
     var body: some View {
         Text(text)
-                .conditional(style.font != nil) { view in
-                    view
-                            .font(Font(style.font!))
-                            .conditional(style.lineHeight != nil) { view in
-                                view
-                                        .lineSpacing((style.lineHeight! - style.font!.lineHeight) / 2)
-                                        .padding(.vertical, (style.lineHeight! - style.font!.lineHeight))
-                            }
-                }
-                .conditional(color != nil) { view in
-                    view.foregroundColor(color!)
-                }
                 .conditional(style.underline) { view in
                     (view as! Text).underline()
                 }
                 .conditional(style.strikethrough) { view in
                     (view as! Text).strikethrough()
+                }
+                .conditional(style.font != nil) { view in
+                    view
+                            .font(Font(style.font!))
+                            .conditional(style.lineHeight != nil) { view in
+                                view
+                                        .lineSpacing(style.lineHeight! - style.font!.lineHeight)
+                                        .padding(.vertical, (style.lineHeight! - style.font!.lineHeight) / 2)
+                            }
+                }
+                .conditional(color != nil) { view in
+                    view.foregroundColor(color!)
                 }
                 .conditional(alignment != nil) { view in
                     view.multilineTextAlignment(alignment!)

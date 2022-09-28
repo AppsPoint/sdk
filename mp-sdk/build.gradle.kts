@@ -2,8 +2,10 @@ plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
     id("com.android.library")
+    id("maven-publish")
 }
 
+group = "ru.appspoint"
 version = "1.0"
 
 kotlin {
@@ -17,7 +19,7 @@ kotlin {
         homepage = "Link to the Shared Module homepage"
         ios.deploymentTarget = "15.0"
         framework {
-            baseName = "shared"
+            baseName = "mp_sdk"
         }
     }
     
@@ -34,9 +36,7 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                implementation("androidx.core:core-ktx:1.8.0")
                 implementation("androidx.appcompat:appcompat:1.5.0")
-                implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
                 implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
                 implementation("androidx.compose.foundation:foundation:1.2.1")
             }
