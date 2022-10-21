@@ -11,19 +11,22 @@ interface ModelIntegration : KotlinObservableObject
 interface DataSource
 
 @PublishedApi
-internal val modelIntegrationsFactories =
+internal val modelIntegrationFactories =
     mutableMapOf<KType, (args: Array<*>) -> ModelIntegration>()
 
 @PublishedApi
 internal val dataSourceFactories = mutableMapOf<KType, () -> DataSource>()
 
+@PublishedApi
+internal val dataSources = mutableMapOf<KType, DataSource>()
+
 object ModelIntegrations {
     inline fun <reified T : ModelIntegration> put(noinline factory: (args: Array<*>) -> T) {
-        modelIntegrationsFactories[typeOf<T>()] = factory
+        modelIntegrationFactories[typeOf<T>()] = factory
     }
 
     inline fun <reified T : ModelIntegration> get(vararg args: Any?): T? =
-        modelIntegrationsFactories[typeOf<T>()]?.invoke(args) as? T
+        modelIntegrationFactories[typeOf<T>()]?.invoke(args) as? T
 }
 
 object DataSources {
@@ -31,6 +34,11 @@ object DataSources {
         dataSourceFactories[typeOf<T>()] = factory
     }
 
-    inline fun <reified T : DataSource> get(): T? =
-        dataSourceFactories[typeOf<T>()]?.invoke() as? T
+    inline fun <reified T : DataSource> get(): T? {
+        val type = typeOf<T>()
+        return dataSources[type] as? T
+            ?: (dataSourceFactories[type]?.invoke() as? T)?.also {
+                dataSources[type] = it
+            }
+    }
 }

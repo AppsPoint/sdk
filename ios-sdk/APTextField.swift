@@ -20,14 +20,14 @@ struct APTextFieldWrapper<Content, ClearIcon>: View where Content: View, ClearIc
     var styles: APTextFieldStyles = APTextFieldStyles()
     var colors: APTextFieldColors = APTextFieldColors()
     @ViewBuilder var clearIcon: () -> ClearIcon
-    @ViewBuilder var content: (() -> APTextField, () -> APClearIcon<ClearIcon>) -> Content
+    @ViewBuilder var content: (@escaping () -> APTextField, @escaping () -> APClearIcon<ClearIcon>) -> Content
 
     init(
             text: Binding<String>,
             placeholder: String = "",
             styles: APTextFieldStyles = APTextFieldStyles(),
             colors: APTextFieldColors = APTextFieldColors(),
-            content: @escaping (() -> APTextField, () -> APClearIcon<ClearIcon>) -> Content
+            content: @escaping (@escaping () -> APTextField, @escaping () -> APClearIcon<ClearIcon>) -> Content
     ) where ClearIcon == EmptyView {
         self._text = text
         self.placeholder = placeholder
@@ -45,7 +45,7 @@ struct APTextFieldWrapper<Content, ClearIcon>: View where Content: View, ClearIc
             styles: APTextFieldStyles = APTextFieldStyles(),
             colors: APTextFieldColors = APTextFieldColors(),
             clearIcon: @escaping () -> ClearIcon,
-            content: @escaping (() -> APTextField, () -> APClearIcon<ClearIcon>) -> Content
+            content: @escaping (@escaping () -> APTextField, @escaping () -> APClearIcon<ClearIcon>) -> Content
     ) {
         self._text = text
         self.placeholder = placeholder
@@ -71,22 +71,9 @@ struct APTextField: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            TextEditor(text: $placeholder)
-                    .disabled(true)
-                    .conditional(styles.placeholderStyle.font != nil) { view in
-                        view
-                                .font(Font(styles.placeholderStyle.font!))
-                                .conditional(styles.placeholderStyle.lineHeight != nil) { view in
-                                    view
-                                            .lineSpacing((styles.placeholderStyle.lineHeight! - styles.placeholderStyle.font!.lineHeight) / 2)
-                                            .padding(.vertical, (styles.placeholderStyle.lineHeight! - styles.placeholderStyle.font!.lineHeight))
-                                }
-                    }
-                    .conditional(colors.placeholderColor != nil) { view in
-                        view.foregroundColor(colors.placeholderColor!)
-                    }
+            APText(text: placeholder, style: styles.placeholderStyle, color: colors.placeholderColor)
                     .opacity(text.isEmpty ? 1 : 0)
-            TextEditor(text: $text)
+            TextField("", text: $text)
                     .conditional(styles.textStyle.font != nil) { view in
                         view
                                 .font(Font(styles.textStyle.font!))

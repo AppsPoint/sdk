@@ -17,7 +17,7 @@ extension View {
         }
     }
 
-    @ViewBuilder func frame(maxWidth: CGFloat? = nil, maxHeight: CGFloat? = nil, width: CGFloat? = nil, height: CGFloat? = nil) -> some View {
+    @ViewBuilder func frame(maxWidth: CGFloat? = nil, width: CGFloat? = nil, maxHeight: CGFloat? = nil, height: CGFloat? = nil) -> some View {
         let preResult = frame(maxWidth: maxWidth, maxHeight: maxHeight, alignment: .topLeading)
         if width != nil || height != nil {
             preResult.frame(width: width, height: height, alignment: .topLeading)
